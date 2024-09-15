@@ -1,0 +1,20 @@
+ID: nodejs-postgres-app
+_schema-version: "3.1"
+version: 1.0.0
+
+modules:
+  - name: basic-postgres
+    type: nodejs
+    path: ./ # Path to your Node.js app folder
+    parameters:
+      memory: 256M
+    requires:
+      - name: postgress-trial-personal
+    build-parameters:
+      builder: npm
+
+resources:
+  - name: postgress-trial-personal
+    type: org.cloudfoundry.existing-service # Use 'existing-service' to bind to an existing PostgreSQL DB
+    parameters:
+      service-name: postgress-trial-personal # Use the exact name of your existing service

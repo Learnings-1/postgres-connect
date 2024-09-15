@@ -1,0 +1,19 @@
+{
+  "VCAP_SERVICES": {
+    "postgresql-db": [
+      {
+        "name": "postgress-trial-personal",
+        "credentials": {
+          "hostname": "127.0.0.1",
+          "port": "2641",
+          "username": "ef578958add9",
+          "password": "e5c2270a6e858af62a980",
+          "dbname": "OMkOLVZpcGjR",
+          "sslrootcert": "<your-ssl-root-cert>",
+          "sslcert": "<your-ssl-cert>",
+          "sslkey": "<your-ssl-key>"
+        }
+      }
+    ]
+  }
+}
