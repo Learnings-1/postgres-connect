@@ -2,6 +2,7 @@ const { Client } = require("pg");
 const express = require("express");
 require("dotenv").config();
 const app = express();
+app.use(express.json());
 var xsenv = require("@sap/xsenv");
 xsenv.loadEnv();
 
@@ -95,6 +96,60 @@ app.get("/users", (req, res) => {
     .catch((err) => {
       console.error("Error fetching users:", err.stack);
       res.status(500).send("Failed to fetch users.");
+    });
+});
+
+// Route to update a user's details (name, email) by ID
+app.put("/update-user/:id", (req, res) => {
+  const userId = req.params.id;
+  const { name, email } = req.body;
+
+  if (!name || !email) {
+    return res.status(400).send("Name and email are required.");
+  }
+
+  const updateUserQuery = `
+    UPDATE users
+    SET name = $1, email = $2
+    WHERE id = $3
+    RETURNING *;
+  `;
+
+  client
+    .query(updateUserQuery, [name, email, userId])
+    .then((result) => {
+      if (result.rowCount === 0) {
+        return res.status(404).send("User not found.");
+      }
+      res.status(200).send(`User with ID: ${userId} updated successfully.`);
+    })
+    .catch((err) => {
+      console.error("Error updating user:", err.stack);
+      res.status(500).send("Failed to update user.");
+    });
+});
+
+// Route to delete a user by ID
+app.delete("/delete-user/:id", (req, res) => {
+  const userId = req.params.id;
+
+  const deleteUserQuery = `
+    DELETE FROM users
+    WHERE id = $1
+    RETURNING *;
+  `;
+
+  client
+    .query(deleteUserQuery, [userId])
+    .then((result) => {
+      if (result.rowCount === 0) {
+        return res.status(404).send("User not found.");
+      }
+      res.status(200).send(`User with ID: ${userId} deleted successfully.`);
+    })
+    .catch((err) => {
+      console.error("Error deleting user:", err.stack);
+      res.status(500).send("Failed to delete user.");
     });
 });
 
