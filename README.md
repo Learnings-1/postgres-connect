@@ -10,16 +10,19 @@ cf enable-ssh <your-app-name>
 
 ```bash
 cf restage <your-app-name>
+cf enable-ssh basic-postgres
 ```
 
 ## Stpe 3 - This command in Cloud Foundry (CF) is used to establish an SSH tunnel between your local machine and a specific app running on Cloud Foundry. This allows you to securely forward ports from your local machine to a remote app in Cloud Foundry
 
 ```bash
 cf ssh -L 2641:<postgres-host>:<postgress-port> <app-name>
+cf restage basic-postgres
 ```
 
 ### Example
 
 ```bash
+cf ssh -L <localport>:<postgres-host>:<postgress-port> <app-name>
 cf ssh -L 2641:postgres-454cb397-1762-4f6e-8058-f75c85e458f5.cqryblsdrbcs.us-east-1.rds.amazonaws.com:6043 basic-postgres -N
 ```
